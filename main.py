@@ -67,18 +67,18 @@ def anneal_k(epoch, max_k, target_k, total_epochs):
 def train(model, loaders, epochs, max_k, target_k):
     model.train()
     for epoch in range(epochs):
-        current_k = anneal_k(epoch, max_k, target_k, epochs)  # Update k
+        current_k = anneal_k(epoch, max_k, target_k, epochs)  
         model.top_k.k = current_k  # Set current k value
 
         for loader in loaders:
             for inputs, labels in loader:
-                inputs = inputs.view(inputs.size(0), -1)  # Flatten images
-                outputs = model(inputs)  # Forward pass
-                loss = F.cross_entropy(outputs, labels)  # Loss calculation
+                inputs = inputs.view(inputs.size(0), -1) 
+                outputs = model(inputs)  
+                loss = F.cross_entropy(outputs, labels)  
 
-                optimizer.zero_grad()  # Zero the gradients
-                loss.backward()  # Backpropagation
-                optimizer.step()  # Update weights
+                optimizer.zero_grad()  
+                loss.backward()  
+                optimizer.step()  
 
         print(f"Epoch {epoch + 1}/{epochs}, k={current_k}, Loss: {loss.item():.4f}")
 
@@ -93,9 +93,9 @@ def evaluate(model, loaders):
     with torch.no_grad():
         for loader in loaders:
             for inputs, labels in loader:
-                inputs = inputs.view(inputs.size(0), -1)  # Flatten images
-                outputs = model(inputs)  # Forward pass
-                predictions = outputs.argmax(dim=1)  # Get predicted labels
+                inputs = inputs.view(inputs.size(0), -1)  
+                outputs = model(inputs) 
+                predictions = outputs.argmax(dim=1)  
                 total_correct += (predictions == labels).sum().item()
                 total_samples += labels.size(0)
 
@@ -103,5 +103,4 @@ def evaluate(model, loaders):
     print(f"Validation Accuracy: {accuracy * 100:.2f}%")
     return accuracy
 
-# Step 9: Evaluate the model on all tasks
 evaluate(model, loaders)
